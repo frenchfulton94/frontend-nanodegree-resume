@@ -3,6 +3,9 @@ This is empty on purpose! Your code to build the resume will go here.
  */
 
 // Data Objects
+
+
+
 var bio = {
     name: "Michael French Fulton Jr.",
     role: "Associate developer",
@@ -18,7 +21,26 @@ var bio = {
     ],
     biopic: new URL("https://scontent.xx.fbcdn.net/v/t31.0-8/19956090_501396906873870_7023472660382440097_o.jpg?oh=72a23caf993e8c1a572dc501e5c80981&oe=5A080D7D"),
     display: function () {
-        console.log(this);
+        var formattedName = HTMLheaderName.replace("%data%", bio.name);
+        var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
+        var welcomeMessage = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
+        $("#header").prepend(formattedRole);
+        $("#header").prepend(formattedName);
+        $("#header").append(welcomeMessage);
+        for (var item in bio.contacts) {
+            var formatted = HTMLcontactGeneric.replace("%data%", bio.contacts[item]).replace("%contact%", item);
+
+            $("#topContacts, #footerContacts").append(formatted);
+
+        }
+
+        var bioPic = HTMLbioPic.replace("%data%", bio.biopic);
+        $("#header").append(bioPic);
+        $("#header").append(HTMLskillsStart);
+        bio.skills.forEach(function (skill) {
+            var formatted = HTMLskills.replace("%data%", skill);
+            $("#skills").append(formatted);
+        });
     }
 };
 
@@ -42,7 +64,35 @@ var education = {
                 }
             ],
     display: function () {
-        console.log(this);
+        this.schools.forEach(function (item) {
+            $("#education").append(HTMLschoolStart);
+            var name = HTMLschoolName.replace("%data%", item.name).replace("#", "https://manhattan.edu/");
+            var degree = HTMLschoolDegree.replace("%data%", item.degree);
+            var dates = HTMLschoolDates.replace("%data%", item.dates);
+            var location = HTMLschoolLocation.replace("%data%", item.location);
+            var itemArray = [name + degree, dates, location, itemArray];
+
+            item.majors.forEach(function (major) {
+                var formattedMajor = HTMLschoolMajor.replace("%data%", major);
+                itemArray.push(formattedMajor);
+            });
+            itemArray.forEach(function (item) {
+                $(".education-entry:last").append(item);
+            });
+        });
+        $("#education").append(HTMLonlineClasses);
+        this.onlineCourses.forEach(function (item) {
+            $("#education").append(HTMLschoolStart);
+            var title = HTMLonlineTitle.replace("%data%", item.title).replace("#", "https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001");
+            var schoolName = HTMLonlineSchool.replace("%data%", item.school);
+            var dates = HTMLonlineDates.replace("%data%", item.dates);
+            var url = HTMLonlineURL.replace("%data%", item.url);
+            var itemArray = [title + schoolName, dates, url];
+            itemArray.forEach(function (item) {
+                $(".education-entry:last").append(item);
+            });
+        });
+
     }
 };
 
@@ -55,7 +105,18 @@ var work = {
         description: "Software Consulting"
     }],
     display: function () {
-        console.log(this);
+        this.jobs.forEach(function (item) {
+            $("#workExperience").append(HTMLworkStart);
+            var employer = HTMLworkEmployer.replace("%data%", item.employer).replace("#", "https://www.infosys.com/");
+            var title = HTMLworkTitle.replace("%data%", item.title);
+            var dates = HTMLworkDates.replace("%data%", item.dates);
+            var location = HTMLworkLocation.replace("%data%", item.location);
+            var description = HTMLworkDescription.replace("%data%", item.description);
+            var values = [employer + title, dates, location, description];
+            values.forEach(function (item) {
+                $(".work-entry:last").append(item);
+            });
+        });
     }
 };
 
@@ -68,107 +129,30 @@ var projects = {
     }],
 
     display: function () {
-        console.log(this);
+        this.projects.forEach(function (item) {
+            $("#projects").append(HTMLprojectStart);
+            var title = HTMLprojectTitle.replace("%data%", item.title).replace("#", "https://inside.manhattan.edu/offices/its/mobile-apps/index.php");
+            var dates = HTMLprojectDates.replace("%data%", item.dates);
+            var description = HTMLprojectDescription.replace("%data%", item.description);
+
+            var itemArray = [title, dates, description];
+            item.images.forEach(function (image) {
+                var formattedImageTags = HTMLprojectImage.replace("%data%", image);
+                console.log(formattedImageTags);
+                itemArray.push(formattedImageTags);
+            });
+            itemArray.forEach(function (item) {
+                $(".project-entry:last").append(item);
+            });
+        });
     }
 };
 
-var formattedName = HTMLheaderName.replace("%data%", bio.name);
-var formattedRole = HTMLheaderRole.replace("%data%", bio.role);
-var welcomeMessage = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
-$("#header").prepend(formattedRole);
-$("#header").prepend(formattedName);
-$("#header").append(welcomeMessage);
-
-// Add Contact Info 
-function addContacts() {
-    for (var item in bio.contacts) {
-        var formatted = HTMLcontactGeneric.replace("%data%", bio.contacts[item]).replace("%contact%", item);
-
-        $("#topContacts").append(formatted);
-
-    }
-
-    var bioPic = HTMLbioPic.replace("%data%", bio.biopic);
-    $("#header").append(bioPic);
-    $("#header").append(HTMLskillsStart);
-    bio.skills.forEach(function (skill) {
-        var formatted = HTMLskills.replace("%data%", skill);
-        $("#skills").append(formatted);
-    });
-}
-
-addContacts();
-
-// Add Work Experience
-function addWork(item) {
-    $("#workExperience").append(HTMLworkStart);
-    var employer = HTMLworkEmployer.replace("%data%", item.employer).replace("#", "https://www.infosys.com/");
-    var title = HTMLworkTitle.replace("%data%", item.title);
-    var dates = HTMLworkDates.replace("%data%", item.dates);
-    var location = HTMLworkLocation.replace("%data%", item.location);
-    var description = HTMLworkDescription.replace("%data%", item.description);
-    var values = [employer + title, dates, location, description];
-    values.forEach(function (item) {
-        $(".work-entry:last").append(item);
-    });
-}
-
-work.jobs.forEach(addWork);
-
-// Add Projects 
-function addProjects(item) {
-    $("#projects").append(HTMLprojectStart);
-    var title = HTMLprojectTitle.replace("%data%", item.title).replace("#", "https://inside.manhattan.edu/offices/its/mobile-apps/index.php");
-    var dates = HTMLprojectDates.replace("%data%", item.dates);
-    var description = HTMLprojectDescription.replace("%data%", item.description);
-
-    var itemArray = [title, dates, description];
-    item.images.forEach(function (image) {
-        var formattedImageTags = HTMLprojectImage.replace("%data%", image);
-        console.log(formattedImageTags);
-        itemArray.push(formattedImageTags);
-    });
-    itemArray.forEach(function (item) {
-        $(".project-entry:last").append(item);
-    });
-}
-
-projects.projects.forEach(addProjects);
-
-// Add Education
-// Add Schools
-function addSchools(item) {
-    $("#education").append(HTMLschoolStart);
-    var name = HTMLschoolName.replace("%data%", item.name).replace("#", "https://manhattan.edu/");
-    var degree = HTMLschoolDegree.replace("%data%", item.degree);
-    var dates = HTMLschoolDates.replace("%data%", item.dates);
-    var location = HTMLschoolLocation.replace("%data%", item.location);
-    var itemArray = [name + degree, dates, location, itemArray];
-
-    item.majors.forEach(function (major) {
-        var formattedMajor = HTMLschoolMajor.replace("%data%", major);
-        itemArray.push(formattedMajor);
-    });
-    itemArray.forEach(function (item) {
-        $(".education-entry:last").append(item);
-    });
-}
-
-// Add Online courses
-function addOnlineCourses(item) {
-    $("#education").append(HTMLschoolStart);
-    var title = HTMLonlineTitle.replace("%data%", item.title).replace("#", "https://www.udacity.com/course/front-end-web-developer-nanodegree--nd001");
-    var schoolName = HTMLonlineSchool.replace("%data%", item.school);
-    var dates = HTMLonlineDates.replace("%data%", item.dates);
-    var url = HTMLonlineURL.replace("%data%", item.url);
-    var itemArray = [title + schoolName, dates, url];
-    itemArray.forEach(function (item) {
-        $(".education-entry:last").append(item);
-    });
-}
-education.schools.forEach(addSchools);
-$("#education").append(HTMLonlineClasses);
-education.onlineCourses.forEach(addOnlineCourses);
+// Display Functions
+bio.display();
+work.display();
+projects.display();
+education.display();
 
 //Google Maps
 $("#mapDiv").append(googleMap);
