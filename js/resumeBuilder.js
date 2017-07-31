@@ -3,9 +3,6 @@ This is empty on purpose! Your code to build the resume will go here.
  */
 
 // Data Objects
-
-
-
 var bio = {
     name: "Michael French Fulton Jr.",
     role: "Associate developer",
@@ -31,9 +28,7 @@ var bio = {
             var formatted = HTMLcontactGeneric.replace("%data%", bio.contacts[item]).replace("%contact%", item);
 
             $("#topContacts, #footerContacts").append(formatted);
-
         }
-
         var bioPic = HTMLbioPic.replace("%data%", bio.biopic);
         $("#header").append(bioPic);
         $("#header").append(HTMLskillsStart);
@@ -92,7 +87,6 @@ var education = {
                 $(".education-entry:last").append(item);
             });
         });
-
     }
 };
 
@@ -127,7 +121,6 @@ var projects = {
         description: "A student-created mobile app to help students quickly tackle everyday tasks at Manhattan College using their ubiquitous smartphone. Employees will also find this app useful.",
         images: ["http://a4.mzstatic.com/us/r30/Purple122/v4/e3/ad/c7/e3adc780-2660-c291-02aa-6b1e8c353c0d/screen696x696.jpeg", "http://a3.mzstatic.com/us/r30/Purple111/v4/d3/1d/9b/d31d9bbb-ebb0-438b-bd93-57eefd576529/screen696x696.jpeg", "http://a1.mzstatic.com/us/r30/Purple122/v4/26/64/7e/26647e73-89f0-ae57-f202-4745c71ffa22/screen696x696.jpeg"]
     }],
-
     display: function () {
         this.projects.forEach(function (item) {
             $("#projects").append(HTMLprojectStart);
